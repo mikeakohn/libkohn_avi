@@ -7,7 +7,6 @@ OBJECTS=fileio.o
 
 default: $(OBJECTS)
 	$(CC) -o ../libkohn_avi.so ../src/kohn_avi.c $(OBJECTS) -shared $(CFLAGS)
-	$(CC) -o ../jpeg2avi ../src/jpeg2avi.c $(CFLAGS) -L.. -lkohn_avi
 	$(CC) -o ../readavi ../src/readavi.c $(OBJECTS) $(CFLAGS)
 
 dll: $(OBJECTS)
@@ -19,6 +18,10 @@ dll: $(OBJECTS)
 .PHONY: samples
 samples:
 	$(CC) -o ../test_audio ../samples/test_audio.c \
+	  -I../src $(CFLAGS) -L.. -lkohn_avi
+	$(CC) -o ../jpeg2avi ../samples/jpeg2avi.c \
+	  -I../src $(CFLAGS) -L.. -lkohn_avi
+	$(CC) -o ../axis2avi ../samples/axis2avi.c \
 	  -I../src $(CFLAGS) -L.. -lkohn_avi
 
 %.o: %.cxx %.h
