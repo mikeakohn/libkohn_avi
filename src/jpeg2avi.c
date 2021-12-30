@@ -5,7 +5,7 @@
  *     Web: https://www.mikekohn.net/
  * License: LGPL 2.1
  *
- * Copyright 2021 by Michael Kohn
+ * Copyright 2005-2021 by Michael Kohn
  *
  */
 
@@ -113,7 +113,7 @@ int main(int argc, char *argv[])
       "This program will take a set of numbered jpegs's and\n"
       "creates an avi/jpeg movie file.\n\n"
       "Usage: jpeg2avi <outfile.avi> <printf formatted filename> <frames per second>\n\n"
-      "Example: jpeg2avi out.avi frames%%05d.jpeg 10\n\n"
+      "Example: jpeg2avi out.avi frames%%05d.jpeg 10\n\n");
 
     exit(0);
   }

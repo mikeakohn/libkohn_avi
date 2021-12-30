@@ -5,12 +5,13 @@
  *     Web: https://www.mikekohn.net/
  * License: LGPL 2.1
  *
- * Copyright 2021 by Michael Kohn
+ * Copyright 2005-2021 by Michael Kohn
  *
  */
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 
 int write_int(FILE *out, uint32_t n)
 {

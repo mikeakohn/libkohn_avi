@@ -65,8 +65,8 @@ struct kohn_stream_format_v_t
   uint32_t header_size;
   uint32_t width;
   uint32_t height;
-  uint16_t int num_planes;
-  uint16_t int bits_per_pixel;
+  uint16_t num_planes;
+  uint16_t bits_per_pixel;
   uint32_t compression_type;
   uint32_t image_size;
   uint32_t x_pels_per_meter;

@@ -5,7 +5,7 @@
  *     Web: https://www.mikekohn.net/
  * License: LGPL 2.1
  *
- * Copyright 2021 by Michael Kohn
+ * Copyright 2005-2021 by Michael Kohn
  *
  */
 
@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
   uint8_t snd_buffer[22050];
   struct kohn_avi_audio_t audio;
 
-  printf("\njpeg2avi routines - Copyright 2005-2022 by Michael Kohn\n");
+  printf("\njpeg2avi routines - Copyright 2005-2021 by Michael Kohn\n");
   printf("https://www.mikekohn.net/\n");
 
   in = fopen("test.jpeg", "rb");

@@ -5,7 +5,7 @@
  *     Web: https://www.mikekohn.net/
  * License: LGPL 2.1
  *
- * Copyright 2021 by Michael Kohn
+ * Copyright 2005-2021 by Michael Kohn
  *
  */
 
@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
   int width, height;
 
   printf(
-    "\naxis2avi routines - Copyright 2005-2022 by Michael Kohn\n"
+    "\naxis2avi routines - Copyright 2005-2021 by Michael Kohn\n"
     "http://www.mikekohn.net/\n"
     "Version Date: 2021-Dec-30\n\n");
 
