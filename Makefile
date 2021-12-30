@@ -10,8 +10,8 @@ dll:
 axis:
 	@+make -C build axis
 
-test:
-	$(CC) -o test test.c $(CFLAGS) -L. -lkohn_avi
+samples:
+	@+make -C build samples
 
 clean:
 	@rm -f build/*.o *.so *.exe *.dll

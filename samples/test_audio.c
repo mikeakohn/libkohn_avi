@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
 
   in = fopen("test.jpeg", "rb");
 
-  if (in == 0)
+  if (in == NULL)
   {
     printf("Cannot open test.jpeg\n");
     exit(1);
@@ -113,7 +113,7 @@ int main(int argc, char *argv[])
     if ((t % 1000) == 0) { printf("%d frames so far...\n",t); }
   }
 
-  if (buffer_len != NULL) { free(buffer); }
+  if (buffer_len != 0) { free(buffer); }
 
   kavi_close(kavi);
 
