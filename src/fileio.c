@@ -57,3 +57,51 @@ int write_chars_bin(FILE *out, char *s, int count)
   return 0;
 }
 
+int read_int(FILE *in)
+{
+  int c;
+
+  c = getc(in);
+  c |= getc(in) << 8;
+  c |= getc(in) << 16;
+  c |= getc(in) << 24;
+
+  return c;
+}
+
+int read_short(FILE *in)
+{
+  int c;
+
+  c = getc(in);
+  c |= getc(in) << 8;
+
+  return c;
+}
+
+int read_chars(FILE *in, char *s, int count)
+{
+  int t;
+
+  for (t = 0; t < count; t++)
+  {
+    s[t] = getc(in);
+  }
+
+  s[t] = 0;
+
+  return 0;
+}
+
+int read_chars_bin(FILE *in, char *s, int count)
+{
+  int t;
+
+  for (t = 0; t < count; t++)
+  {
+    s[t] = getc(in);
+  }
+
+  return 0;
+}
+

@@ -24,8 +24,8 @@ static int skip_chunk(FILE *in)
   int chunk_size;
   int end_of_chunk;
 
-  read_chars(in,chunk_id,4);
-  chunk_size = read_long(in);
+  read_chars(in, chunk_id, 4);
+  chunk_size = read_int(in);
 
   printf("Uknown Chunk at %d\n",(int)ftell(in));
   printf("-------------------------------\n");
@@ -101,9 +101,9 @@ static int parse_idx1(FILE *in, int chunk_len)
   {
     read_chars(in, index_entry.ckid, 4);
 
-    index_entry.dwFlags = read_long(in);
-    index_entry.dwChunkOffset = read_long(in);
-    index_entry.dwChunkLength = read_long(in);
+    index_entry.dwFlags = read_int(in);
+    index_entry.dwChunkOffset = read_int(in);
+    index_entry.dwChunkLength = read_int(in);
 
     printf("      %s   0x%08x      0x%08x           0x%08x\n",
       index_entry.ckid,
@@ -121,20 +121,20 @@ static int read_avi_header(FILE *in, struct avi_header_t *avi_header)
 {
   long offset = ftell(in);
 
-  avi_header->TimeBetweenFrames = read_long(in);
-  avi_header->MaximumDataRate = read_long(in);
-  avi_header->PaddingGranularity = read_long(in);
-  avi_header->Flags = read_long(in);
-  avi_header->TotalNumberOfFrames = read_long(in);
-  avi_header->NumberOfInitialFrames = read_long(in);
-  avi_header->NumberOfStreams = read_long(in);
-  avi_header->SuggestedBufferSize = read_long(in);
-  avi_header->Width = read_long(in);
-  avi_header->Height = read_long(in);
-  avi_header->TimeScale = read_long(in);
-  avi_header->DataRate = read_long(in);
-  avi_header->StartTime = read_long(in);
-  avi_header->DataLength = read_long(in);
+  avi_header->TimeBetweenFrames = read_int(in);
+  avi_header->MaximumDataRate = read_int(in);
+  avi_header->PaddingGranularity = read_int(in);
+  avi_header->Flags = read_int(in);
+  avi_header->TotalNumberOfFrames = read_int(in);
+  avi_header->NumberOfInitialFrames = read_int(in);
+  avi_header->NumberOfStreams = read_int(in);
+  avi_header->SuggestedBufferSize = read_int(in);
+  avi_header->Width = read_int(in);
+  avi_header->Height = read_int(in);
+  avi_header->TimeScale = read_int(in);
+  avi_header->DataRate = read_int(in);
+  avi_header->StartTime = read_int(in);
+  avi_header->DataLength = read_int(in);
 
   printf("         offset=0x%lx\n", offset);
   printf("             TimeBetweenFrames: %d\n", avi_header->TimeBetweenFrames);
@@ -180,16 +180,16 @@ long offset = ftell(in);
 
   read_chars(in, stream_header->DataType, 4);
   read_chars(in, stream_header->DataHandler, 4);
-  stream_header->Flags = read_long(in);
-  stream_header->Priority = read_long(in);
-  stream_header->InitialFrames = read_long(in);
-  stream_header->TimeScale = read_long(in);
-  stream_header->DataRate = read_long(in);
-  stream_header->StartTime = read_long(in);
-  stream_header->DataLength = read_long(in);
-  stream_header->SuggestedBufferSize = read_long(in);
-  stream_header->Quality = read_long(in);
-  stream_header->SampleSize = read_long(in);
+  stream_header->Flags = read_int(in);
+  stream_header->Priority = read_int(in);
+  stream_header->InitialFrames = read_int(in);
+  stream_header->TimeScale = read_int(in);
+  stream_header->DataRate = read_int(in);
+  stream_header->StartTime = read_int(in);
+  stream_header->DataLength = read_int(in);
+  stream_header->SuggestedBufferSize = read_int(in);
+  stream_header->Quality = read_int(in);
+  stream_header->SampleSize = read_int(in);
 
   printf("            offset=0x%lx\n", offset);
   printf("                      DataType: %s\n", stream_header->DataType);
@@ -215,17 +215,17 @@ static int read_stream_format(FILE *in, struct stream_format_t *stream_format)
   int t, r, g, b;
   long offset = ftell(in);
 
-  stream_format->header_size = read_long(in);
-  stream_format->image_width = read_long(in);
-  stream_format->image_height = read_long(in);
-  stream_format->number_of_planes = read_word(in);
-  stream_format->bits_per_pixel = read_word(in);
-  stream_format->compression_type = read_long(in);
-  stream_format->image_size_in_bytes = read_long(in);
-  stream_format->x_pels_per_meter = read_long(in);
-  stream_format->y_pels_per_meter = read_long(in);
-  stream_format->colors_used = read_long(in);
-  stream_format->colors_important = read_long(in);
+  stream_format->header_size = read_int(in);
+  stream_format->image_width = read_int(in);
+  stream_format->image_height = read_int(in);
+  stream_format->number_of_planes = read_short(in);
+  stream_format->bits_per_pixel = read_short(in);
+  stream_format->compression_type = read_int(in);
+  stream_format->image_size_in_bytes = read_int(in);
+  stream_format->x_pels_per_meter = read_int(in);
+  stream_format->y_pels_per_meter = read_int(in);
+  stream_format->colors_used = read_int(in);
+  stream_format->colors_important = read_int(in);
   stream_format->palette = 0;
 
   if (stream_format->colors_important != 0)
@@ -263,18 +263,20 @@ static int read_stream_format(FILE *in, struct stream_format_t *stream_format)
   return 0;
 }
 
-static int read_stream_format_auds(FILE *in, struct stream_format_auds_t *stream_format)
+static int read_stream_format_auds(
+  FILE *in,
+  struct stream_format_auds_t *stream_format)
 {
-  long offset=ftell(in);
+  long offset = ftell(in);
 
-  stream_format->format = read_word(in);
-  stream_format->channels = read_word(in);
-  stream_format->samples_per_second = read_long(in);
-  stream_format->bytes_per_second = read_long(in);
-  int block_align = read_word(in);
-  stream_format->block_size_of_data = read_word(in);
-  stream_format->bits_per_sample = read_word(in);
-  //stream_format->extended_size = read_word(in);
+  stream_format->format = read_short(in);
+  stream_format->channels = read_short(in);
+  stream_format->samples_per_second = read_int(in);
+  stream_format->bytes_per_second = read_int(in);
+  int block_align = read_short(in);
+  stream_format->block_size_of_data = read_short(in);
+  stream_format->bits_per_sample = read_short(in);
+  //stream_format->extended_size = read_short(in);
 
   printf("            offset=0x%lx\n", offset);
   printf("                        format: %d\n", stream_format->format);
@@ -305,7 +307,7 @@ static int parse_hdrl_list(
   int stream_type=0;     // 0=video 1=sound
 
   read_chars(in, chunk_id, 4);
-  chunk_size = read_long(in);
+  chunk_size = read_int(in);
   read_chars(in, chunk_type, 4);
 
   printf("      AVI Header LIST (id=%s size=%d type=%s offset=0x%lx)\n",
@@ -332,7 +334,7 @@ static int parse_hdrl_list(
   {
     long offset = ftell(in);
     read_chars(in, chunk_type, 4);
-    chunk_size = read_long(in);
+    chunk_size = read_int(in);
     next_chunk = ftell(in) + chunk_size;
 
     if ((chunk_size % 4) != 0)
@@ -416,7 +418,7 @@ static int parse_hdrl(
   long offset = ftell(in);
 
   read_chars(in, chunk_id, 4);
-  chunk_size = read_long(in);
+  chunk_size = read_int(in);
 
   printf("      AVI Header Chunk (id=%s size=%d offset=0x%lx)\n",
     chunk_id, chunk_size, offset);
@@ -451,7 +453,7 @@ static int parse_riff(FILE *in)
   long offset = ftell(in);
 
   read_chars(in, chunk_id, 4);
-  chunk_size = read_long(in);
+  chunk_size = read_int(in);
   read_chars(in, chunk_type, 4);
 
   printf("RIFF Chunk (id=%s size=%d type=%s offset=0x%lx)\n",
@@ -476,7 +478,7 @@ static int parse_riff(FILE *in)
   {
     long offset = ftell(in);
     read_chars(in,chunk_id, 4);
-    chunk_size = read_long(in);
+    chunk_size = read_int(in);
     end_of_subchunk = ftell(in) + chunk_size;
 
     if (strcasecmp("JUNK", chunk_id) == 0 || strcasecmp("PAD ", chunk_id) == 0)
