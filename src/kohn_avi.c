@@ -219,7 +219,7 @@ static int write_avi_header_chunk(struct kavi_t *kavi)
   return 0;
 }
 
-static int write_index(FILE *out, int count, unsigned int *offsets)
+static int write_index(FILE *out, int count, uint32_t *offsets)
 {
   int marker, t;
   int offset = 4;
@@ -289,7 +289,7 @@ int get_color(int col, struct stream_format_t *stream_format_v)
 
   for (d = 1;  d < 255; d++)
   {
-    for (c=0; c<stream_format_v->palette_count; c++)
+    for (c = 0; c<stream_format_v->palette_count; c++)
     {
       if (color_distance(col,stream_format_v->palette[c])<=d) return c;
     }
@@ -300,7 +300,7 @@ int get_color(int col, struct stream_format_t *stream_format_v)
 
 int rle8_write_line(
   FILE *out,
-  unsigned int *image,
+  uint32_t *image,
   int width,
   struct stream_format_v_t *stream_format_v)
 {
@@ -475,7 +475,7 @@ struct kavi_t *kavi_open(
     // Set stream header.
     memcpy(kavi->stream_header_a.data_type, "auds", 4);
     //memcpy(kavi->stream_header_a.codec,uncompressed, 4);
-    //kavi->stream_header_a.codec[0]  =0;
+    //kavi->stream_header_a.codec[0] = 0;
     kavi->stream_header_a.codec[0] = 1;
     kavi->stream_header_a.codec[1] = 0;
     kavi->stream_header_a.codec[2] = 0;
@@ -547,7 +547,7 @@ void kavi_set_size(struct kavi_t *kavi, int width, int height)
   kavi->stream_format_v.image_size = width * height * 3;
 }
 
-void kavi_add_frame(struct kavi_t *kavi, unsigned char *buffer, int len)
+void kavi_add_frame(struct kavi_t *kavi, uint8_t *buffer, int len)
 {
   int maxi_pad;  /* if your frame is raggin, give it some paddin' */
   int t;
@@ -561,20 +561,20 @@ void kavi_add_frame(struct kavi_t *kavi, unsigned char *buffer, int len)
   if (kavi->offset_count >= kavi->offsets_len)
   {
     kavi->offsets_len += 1024;
-    kavi->offsets = realloc(kavi->offsets,kavi->offsets_len * sizeof(int));
+    kavi->offsets = realloc(kavi->offsets, kavi->offsets_len * sizeof(int));
   }
 
   kavi->offsets[kavi->offsets_ptr++] = len + maxi_pad;
 
-  write_chars_bin(kavi->out,"00dc", 4);
+  write_chars_bin(kavi->out, "00dc", 4);
   write_int(kavi->out, len + maxi_pad);
 
-  t=fwrite(buffer, 1, len,kavi->out);
+  t=fwrite(buffer, 1, len, kavi->out);
 
-  for (t = 0; t < maxi_pad; t++) { putc(0,kavi->out); }
+  for (t = 0; t < maxi_pad; t++) { putc(0, kavi->out); }
 }
 
-void kavi_add_audio(struct kavi_t *kavi, unsigned char *buffer, int len)
+void kavi_add_audio(struct kavi_t *kavi, uint8_t *buffer, int len)
 {
   int maxi_pad;  /* incase audio bleeds over the 4 byte boundary  */
   int t;
@@ -599,7 +599,7 @@ void kavi_add_audio(struct kavi_t *kavi, unsigned char *buffer, int len)
 
   for (t = 0; t < maxi_pad; t++) { putc(0, kavi->out); }
 
-  kavi->stream_header_a.data_length += len+maxi_pad;
+  kavi->stream_header_a.data_length += len + maxi_pad;
 }
 
 void kavi_close(struct kavi_t *kavi)
@@ -621,12 +621,12 @@ void kavi_close(struct kavi_t *kavi)
   t = ftell(kavi->out);
   fseek(kavi->out, 12, SEEK_SET);
   write_avi_header_chunk(kavi);
-  fseek(kavi->out, t ,SEEK_SET);
+  fseek(kavi->out, t, SEEK_SET);
 
   t = ftell(kavi->out);
   fseek(kavi->out, 4, SEEK_SET);
   write_int(kavi->out, t - 8);
-  fseek(kavi->out,t,SEEK_SET);
+  fseek(kavi->out, t, SEEK_SET);
 
   if (kavi->stream_format_v.palette != NULL)
   {

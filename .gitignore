@@ -2,3 +2,4 @@ build/*.o
 jpeg2avi
 *.so
 *.swp
+readavi

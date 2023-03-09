@@ -5,7 +5,7 @@
  *     Web: https://www.mikekohn.net/
  * License: LGPL 2.1
  *
- * Copyright 2004-2021 by Michael Kohn
+ * Copyright 2004-2023 by Michael Kohn
  *
  */
 
@@ -155,7 +155,7 @@ static int read_avi_header(FILE *in, struct avi_header_t *avi_header)
   return 0;
 }
 
-static void print_data_handler(unsigned char *handler)
+static void print_data_handler(uint8_t *handler)
 {
   int t;
 
@@ -194,7 +194,7 @@ long offset = ftell(in);
   printf("            offset=0x%lx\n", offset);
   printf("                      DataType: %s\n", stream_header->DataType);
   printf("                   DataHandler: ");
-  print_data_handler((unsigned char *)stream_header->DataHandler);
+  print_data_handler((uint8_t *)stream_header->DataHandler);
   printf("\n");
   printf("                         Flags: %d\n", stream_header->Flags);
   printf("                      Priority: %d\n", stream_header->Priority);
@@ -303,8 +303,8 @@ static int parse_hdrl_list(
   char chunk_type[5];
   int end_of_chunk;
   int next_chunk;
-  long offset=ftell(in);
-  int stream_type=0;     // 0=video 1=sound
+  long offset = ftell(in);
+  int stream_type = 0;     // 0=video 1=sound
 
   read_chars(in, chunk_id, 4);
   chunk_size = read_int(in);
@@ -410,7 +410,7 @@ static int parse_hdrl(
   struct avi_header_t *avi_header,
   struct stream_header_t *stream_header,
   struct stream_format_t *stream_format,
-  unsigned int size)
+  uint32_t size)
 {
   char chunk_id[8];
   int chunk_size;
@@ -516,7 +516,7 @@ static int parse_riff(FILE *in)
       hex_dump_chunk(in, chunk_size);
     }
       else
-    if (strcasecmp("hdrl",chunk_type)==0)
+    if (strcasecmp("hdrl",chunk_type) == 0)
     {
       parse_hdrl(in, &avi_header, &stream_header, &stream_format, chunk_size);
       // skip_chunk(in);
