@@ -5,7 +5,7 @@
  *     Web: https://www.mikekohn.net/
  * License: LGPL 2.1
  *
- * Copyright 2005-2021 by Michael Kohn
+ * Copyright 2005-2023 by Michael Kohn
  *
  */
 
@@ -174,7 +174,7 @@ static int write_avi_header_chunk(struct kavi_t *kavi)
 {
   long marker,t;
   long sub_marker;
-  FILE *out=kavi->out;
+  FILE *out = kavi->out;
 
   write_chars_bin(out, "LIST", 4);
   marker = ftell(out);
@@ -221,10 +221,11 @@ static int write_avi_header_chunk(struct kavi_t *kavi)
 
 static int write_index(FILE *out, int count, uint32_t *offsets)
 {
-  int marker, t;
+  long marker;
+  int t;
   int offset = 4;
 
-  if (offsets == 0) { return -1; }
+  if (offsets == NULL) { return -1; }
 
   write_chars_bin(out, "idx1", 4);
   marker = ftell(out);
